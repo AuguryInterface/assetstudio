@@ -38,28 +38,31 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore AssetStudio.sln
 
-      - name: Build CLI (net8.0-windows)
-        run: dotnet build AssetStudio.CLI/AssetStudio.CLI.csproj -c Release -f net8.0-windows --no-restore
+      # ================= .NET 8.0 自己完結型発行 =================
+      - name: Publish CLI (net8.0-windows / Self-Contained)
+        run: dotnet publish AssetStudio.CLI/AssetStudio.CLI.csproj -c Release -f net8.0-windows -r win-x64 --self-contained true --no-restore -o ./publish/net8.0/CLI
 
-      - name: Build GUI (net8.0-windows)
-        run: dotnet build AssetStudio.GUI/AssetStudio.GUI.csproj -c Release -f net8.0-windows --no-restore
+      - name: Publish GUI (net8.0-windows / Self-Contained)
+        run: dotnet publish AssetStudio.GUI/AssetStudio.GUI.csproj -c Release -f net8.0-windows -r win-x64 --self-contained true --no-restore -o ./publish/net8.0/GUI
 
-      - name: Build CLI (net10.0-windows)
-        run: dotnet build AssetStudio.CLI/AssetStudio.CLI.csproj -c Release -f net10.0-windows --no-restore
+      # ================= .NET 10.0 自己完結型発行 =================
+      - name: Publish CLI (net10.0-windows / Self-Contained)
+        run: dotnet publish AssetStudio.CLI/AssetStudio.CLI.csproj -c Release -f net10.0-windows -r win-x64 --self-contained true --no-restore -o ./publish/net10.0/CLI
 
-      - name: Build GUI (net10.0-windows)
-        run: dotnet build AssetStudio.GUI/AssetStudio.GUI.csproj -c Release -f net10.0-windows --no-restore
+      - name: Publish GUI (net10.0-windows / Self-Contained)
+        run: dotnet publish AssetStudio.GUI/AssetStudio.GUI.csproj -c Release -f net10.0-windows -r win-x64 --self-contained true --no-restore -o ./publish/net10.0/GUI
 
+      # ================= アーティファクトのアップロード =================
       - name: Upload .NET 8 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: AssetStudio-net8.0-${{ github.sha }}
-          path: AssetStudio.GUI/bin/Release/net8.0-windows/
+          name: AssetStudio-SelfContained-net8.0-${{ github.sha }}
+          path: ./publish/net8.0/
           retention-days: 14
 
       - name: Upload .NET 10 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: AssetStudio-net10.0-${{ github.sha }}
-          path: AssetStudio.GUI/bin/Release/net10.0-windows/
+          name: AssetStudio-SelfContained-net10.0-${{ github.sha }}
+          path: ./publish/net10.0/
           retention-days: 14
