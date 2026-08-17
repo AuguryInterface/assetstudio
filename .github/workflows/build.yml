@@ -35,8 +35,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      # 修正点：復元時に対象のOS・アーキテクチャ（win-x64）を明示的に指定します
       - name: Restore dependencies
-        run: dotnet restore AssetStudio.sln
+        run: dotnet restore AssetStudio.sln -r win-x64
 
       # ================= .NET 8.0 自己完結型発行 =================
       - name: Publish CLI (net8.0-windows / Self-Contained)
